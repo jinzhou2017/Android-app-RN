@@ -11,12 +11,13 @@ export default class Recommend extends Component {
       qiangke: 0,
       chengdu: 0,
       zuizhong: 0,
-      kuangbao: 0
+      kuangbao: 0,
+      kangxing: 0
     }
     this.handleResult = this.handleResult.bind(this)
   }
   handleResult() {
-    const {dengjs, hushi, qiangfa, qiangke, chengdu} = this.state
+    const { dengjs, hushi, qiangfa, qiangke, chengdu, kangxing} = this.state
     if(dengjs < 140) {
       Alert.alert(
         '提示',
@@ -30,7 +31,10 @@ export default class Recommend extends Component {
       return
     }
     const jichu = (dengjs - 140)*160 + 22330
-    let zuizhong = Math.ceil(jichu * (1 + qiangfa/100) * (1 + hushi/100) * 1.2 * (1 + qiangke/100/2))
+    let zuizhong = Math.ceil(jichu * (1 + qiangfa/100) * (1 + hushi/100 - kangxing/100) * 1.2 * (1 + qiangke/100/2))
+    if(zuizhong < 0) {
+      zuizhong = 0
+    }
     let kuangbao = zuizhong * 1.5
     if(chengdu !== 0) {
       kuangbao = zuizhong * (1.5 + chengdu/100)
@@ -66,6 +70,11 @@ export default class Recommend extends Component {
           <TextInput
             onChangeText={(chengdu) => this.setState({ chengdu })}
             value={this.state.chengdu}
+          />
+          <Text>抗性</Text>
+          <TextInput
+            onChangeText={(kangxing) => this.setState({ kangxing })}
+            value={this.state.kangxing}
           />
           <Button 
             title="计算"
